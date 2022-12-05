@@ -110,8 +110,42 @@ function listbackup(){
     sleep 5
 }
 
+function where(){
+	clear
+    	echo "|----------------------------------------------|"
+	echo "| Wo soll nach dem Backup gesucht werden:      |"
+	echo "|                                              |"
+	read -p "| Eingabe: " WHERE
+}
+
+function type(){
+	clear
+    	echo "|----------------------------------------------|"
+	echo "| Welcher Datentyp hat das Backup:             |"
+	echo "|                                              |"
+	read -p "| Eingabe: " TYPE
+}
+
 function deletebackup(){
 	echo "DELETEBACKUP"
+	YESNO=0
+
+	until [ $YESNO = 1 ]
+	do
+        where
+        echo "Sind Sie sich sicher, dass Sie in $WHERE nach das / die Backup/-s suchen wollen?"
+        read -p "0: nein | 1: ja" YESNO
+    done
+    YESNO=0
+
+	until [ $YESNO = 1 ]
+	do
+        type
+        echo "Sind Sie sich sicher, dass Sie das / die Backup/-s vom Datentyp $TYPE löschen wollen?"
+        read -p "0: nein | 1: ja" YESNO
+    done
+    echo "find $WHERE -name *.$TYPE -typ -f"
+    sleep 5
 }
 
 while :
