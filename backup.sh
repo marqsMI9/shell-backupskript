@@ -130,6 +130,9 @@ function listbackup(){
         read -p "0: nein | 1: ja" YESNO
 	
     	done
+	cd /$WHERE
+    	ls -l $WHERE
+    
 	YESNO=0
 
 	until [ $YESNO = 1 ]
