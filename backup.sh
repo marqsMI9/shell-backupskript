@@ -120,7 +120,7 @@ function backuplist(){
 }
 
 function listbackup(){
-	echo "LISTBACKUP
+	echo "LISTBACKUP"
 	YESNO=0
 
 	until [ $YESNO = 1 ]
