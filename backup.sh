@@ -58,7 +58,7 @@ function whichBackuplist(){
 }
 
 function backup(){
-    DATEINAME
+    BACKUPFILE=$(date +%Y%m%d-%H%M%S)-backup.tgz
 	echo "BACKUP"
 
 	YESNO=0
@@ -87,27 +87,12 @@ function backup(){
         echo "Sind Sie sich sicher, dass Sie $WHAT2BACKUP als Backup erstellen wollen?"
         read -p "0: nein | 1: ja" YESNO
     done
-    echo "tar cf - $(COMPRESS) I pv I gzip > $(WHERE2BACKUP)/, $WHAT2BACKUP"
+    tar cf${COMPRESS} ${WHERE2BACKUP}/$BACKUPFILE ${WHAT2BACKUP}
     sleep 5
 }
 
 function unbackup(){
 	echo "UNBACKUP"
-}
-
-function listbackup(){
-	echo "LISTBACKUP"
-
-	YESNO=0
-
-	until [ $YESNO = 1 ]
-	do
-        whichBackuplist
-        echo "Sind Sie sich sicher, dass Sie das Backup $WHICHBACKUPLIST gelistet haben wollen?"
-        read -p "0: nein | 1: ja" YESNO
-    done
-    echo "tar -tf $WHICHBACKUPLIST"
-    sleep 5
 }
 
 function where(){
@@ -118,12 +103,43 @@ function where(){
 	read -p "| Eingabe: " WHERE
 }
 
-function type(){
+function which(){
 	clear
     	echo "|----------------------------------------------|"
-	echo "| Welcher Datentyp hat das Backup:             |"
+	echo "| Welches Backup soll gelöscht werden:         |"
 	echo "|                                              |"
-	read -p "| Eingabe: " TYPE
+	read -p "| Eingabe: " WHICH
+}
+
+function backuplist(){
+	clear 
+	echo "|----------------------------------------------|"
+	echo "| Welches Backup soll gelistet werden:         |"
+	echo "|                                              |"
+	read -p "| Eingabe: " BACKUPLIST
+}
+
+function listbackup(){
+	echo "LISTBACKUP
+	YESNO=0
+
+	until [ $YESNO = 1 ]
+	do
+        where
+        echo "Sind Sie sich sicher, dass Sie in $WHERE nach das Backup suchen wollen?"
+        read -p "0: nein | 1: ja" YESNO
+	
+    	done
+	YESNO=0
+
+	until [ $YESNO = 1 ]
+	do
+        backuplist
+        echo "Sind Sie sich sicher, dass Sie das Backup $BACKUPLIST auflisten wollen?"
+        read -p "0: nein | 1: ja" YESNO
+	
+    	done
+	tar tf $BACKUPLIST
 }
 
 function deletebackup(){
@@ -133,18 +149,20 @@ function deletebackup(){
 	until [ $YESNO = 1 ]
 	do
         where
-        echo "Sind Sie sich sicher, dass Sie in $WHERE nach das / die Backup/-s suchen wollen?"
+        echo "Sind Sie sich sicher, dass Sie in $WHERE nach das Backup suchen wollen?"
         read -p "0: nein | 1: ja" YESNO
     done
+    cd /$WHERE
+    ls -l $WHERE
     YESNO=0
 
 	until [ $YESNO = 1 ]
 	do
-        type
-        echo "Sind Sie sich sicher, dass Sie das / die Backup/-s vom Datentyp $TYPE löschen wollen?"
+        which
+        echo "Sind Sie sich sicher, dass Sie das die Backup $WHICH löschen wollen?"
         read -p "0: nein | 1: ja" YESNO
     done
-    echo "find $WHERE -name *.$TYPE -typ -f"
+    rm $WHICH
     sleep 5
 }
 
